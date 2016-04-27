@@ -14,13 +14,14 @@ class MLSVisualization : public EnvironmentItemVisualizer
     Q_PROPERTY(bool show_negative READ isNegativeShown WRITE setShowNegative)
     Q_PROPERTY(bool estimate_normals READ areNormalsEstimated WRITE setEstimateNormals)
     Q_PROPERTY(bool cycle_height_color READ isHeightColorCycled WRITE setCycleHeightColor)
+    Q_PROPERTY(bool contour_height_color READ isContourHeightColor WRITE setContourHeightColor)
     Q_PROPERTY(bool show_extents READ areExtentsShown WRITE setShowExtents)
     Q_PROPERTY(double cycle_color_interval READ getCycleColorInterval WRITE setCycleColorInterval)
+    Q_PROPERTY(bool connected_surface READ isConnectedSurface WRITE setConnectedSurface)
     Q_PROPERTY(QColor horizontal_cell_color READ getHorizontalCellColor WRITE setHorizontalCellColor)
     Q_PROPERTY(QColor vertical_cell_color READ getVerticalCellColor WRITE setVerticalCellColor)
     Q_PROPERTY(QColor negative_cell_color READ getNegativeCellColor WRITE setNegativeCellColor)
     Q_PROPERTY(QColor uncertainty_color READ getUncertaintyColor WRITE setUncertaintyColor)
-    Q_PROPERTY(bool connected_surface READ isConnectedSurface WRITE setConnectedSurface)
     
     public:
 	MLSVisualization();
@@ -43,6 +44,10 @@ class MLSVisualization : public EnvironmentItemVisualizer
         void setConnectedSurface(bool enabled);
         bool isHeightColorCycled() const;
         void setCycleHeightColor(bool enabled);
+
+        bool isContourHeightColor() const;
+        void setContourHeightColor(bool enabled);
+
         double getCycleColorInterval() const;
         void setCycleColorInterval(double interval);
         QColor getHorizontalCellColor() const;
@@ -66,7 +71,8 @@ class MLSVisualization : public EnvironmentItemVisualizer
 	bool showNegative;
 	bool estimateNormals;
 	bool cycleHeightColor;
-        double cycleColorInterval;
+	bool contourHeightColor;
+	double cycleColorInterval;
 	bool showExtents;
     bool connectedSurface;
 };

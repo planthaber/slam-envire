@@ -22,6 +22,7 @@ MLSVisualization::MLSVisualization()
   showNegative(false),
   estimateNormals(false),
   cycleHeightColor(true),
+  contourHeightColor(false),
   cycleColorInterval(1.0),
   showExtents(true),
   connectedSurface(false)
@@ -545,8 +546,22 @@ void MLSVisualization::updateNode(envire::EnvironmentItem* item, osg::Group* gro
                     alpha = std::max( 0.0, 1.0 - sp.stdev );
                     geode->setColorHSVA( hue, sat, lum, alpha );
                     geode->addVertex(osg::Vec3d(xp,ysp,sheight),snormal);
-                }
-                else{
+                }else if (contourHeightColor){
+                    osg::Vec4 color;
+                        if ( fabs(p.mean-cycleColorInterval) < 0.03 ){
+                            color.x() = 0;
+                            color.y() = 0;
+                            color.z() = 0;
+                            color.w() = 1;
+                        }else{
+                            color = horizontalCellColor;
+                        }
+                        geode->setColor( color );
+                        geode->addVertex(osg::Vec3d(xp,yp,height),normal);
+                        //geode->setColor( horizontalCellColor );
+                        geode->addVertex(osg::Vec3d(xp,ysp,sheight),snormal);
+
+                }else{
                     geode->setColor( horizontalCellColor );
                     geode->addVertex(osg::Vec3d(xp,yp,height),normal);
                     geode->addVertex(osg::Vec3d(xp,ysp,sheight),snormal);
@@ -624,8 +639,28 @@ bool MLSVisualization::isHeightColorCycled() const
 void MLSVisualization::setCycleHeightColor(bool enabled)
 {
     cycleHeightColor = enabled;
+    if (enabled){
+        contourHeightColor = false;
+        emit propertyChanged("contour_height_color");
+    }
     emit propertyChanged("cycle_height_color");
 }
+
+bool MLSVisualization::isContourHeightColor() const
+{
+    return contourHeightColor;
+}
+
+void MLSVisualization::setContourHeightColor(bool enabled)
+{
+    contourHeightColor = enabled;
+    if (enabled){
+        cycleHeightColor = false;
+        emit propertyChanged("cycle_height_color");
+    }
+    emit propertyChanged("contour_height_color");
+}
+
 
 double MLSVisualization::getCycleColorInterval() const
 {
